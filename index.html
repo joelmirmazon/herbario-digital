@@ -1,0 +1,46 @@
+// --- 5. Sistema de Backup (Exportar/Importar) ---
+
+function downloadData() {
+    // Cria um "blob" (arquivo virtual) com os dados atuais
+    const dataStr = JSON.stringify(plants, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    // Cria um link falso para forçar o download
+    const a = document.createElement('a');
+    a.href = url;
+    // Nome do arquivo com a data de hoje (Ex: herbario_backup_2025-05-27.json)
+    const date = new Date().toISOString().split('T')[0];
+    a.download = `herbario_backup_${date}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+function uploadData(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedPlants = JSON.parse(e.target.result);
+            
+            // Validação simples para garantir que é um arquivo do herbário
+            if (!Array.isArray(importedPlants)) throw new Error("Formato inválido");
+            
+            // Pergunta de segurança
+            if(confirm(`Deseja substituir sua lista atual por ${importedPlants.length} espécimes do backup?`)) {
+                plants = importedPlants;
+                saveToStorage();
+                renderCards();
+                alert("Dados restaurados com sucesso!");
+            }
+        } catch (error) {
+            alert("Erro ao ler o arquivo. Certifique-se de que é um JSON válido do Herbário.");
+        }
+    };
+    reader.readAsText(file);
+    // Limpa o input para permitir carregar o mesmo arquivo novamente se necessário
+    input.value = ''; 
+}
