@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flora Digital do Centro Sul do Paraná</title>
+    <title>FOCSPR - Flora Online Centro-Sul do Paraná</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
@@ -11,120 +11,679 @@
             theme: {
                 extend: {
                     colors: {
-                        botany: { 50: '#f2fcf5', 100: '#e1f8e8', 500: '#34b379', 600: '#259261', 700: '#207550', 800: '#1d5d42', 900: '#194c38' }
+                        botany: { 50: '#f4fbf7', 100: '#eefdf5', 200: '#cbf7de', 300: '#9df0c3', 500: '#34d399', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b' }
                     },
                     fontFamily: { serif: ['Merriweather', 'serif'], sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         .scientific-name { font-family: 'Merriweather', serif; font-style: italic; }
-        .checkbox-wrapper input:checked + div { background-color: #e1f8e8; border-color: #34b379; color: #194c38; }
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #34b379; border-radius: 4px; }
+        /* Estilo para a ficha técnica (Reflora style) */
+        .reflora-section { margin-bottom: 1.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; }
+        .reflora-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: #047857; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+        .reflora-text { font-size: 0.95rem; line-height: 1.6; color: #374151; text-align: justify; }
+        
+        /* Checkbox customizado para a chave */
+        .key-checkbox:checked + div { background-color: #059669; color: white; border-color: #059669; }
+        .key-checkbox:checked + div p { color: #a7f3d0; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-    <header class="bg-botany-900 text-white shadow-lg sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <header class="bg-botany-900 text-white shadow-xl sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <i class="ph ph-tree-palm text-3xl text-botany-300"></i>
+                <div class="bg-white/10 p-2 rounded-lg backdrop-blur-sm">
+                    <i class="ph ph-flower-lotus text-3xl text-botany-300"></i>
+                </div>
                 <div>
-                    <h1 class="text-lg md:text-xl font-bold tracking-wide leading-tight">Flora Digital</h1>
-                    <p class="text-[10px] md:text-xs text-botany-200 uppercase tracking-widest">Centro Sul do Paraná</p>
+                    <h1 class="text-lg md:text-xl font-bold tracking-wide leading-none">FOCSPR</h1>
+                    <p class="text-[11px] md:text-xs text-botany-200 uppercase tracking-widest mt-1">Flora Online da Região Centro Sul do Paraná</p>
                 </div>
             </div>
-            <div class="flex bg-botany-800 rounded-lg p-1">
-                <button onclick="switchTab('collection')" id="tab-collection" class="px-4 py-1.5 rounded-md text-sm font-medium transition bg-botany-600 text-white shadow">Coleção</button>
-                <button onclick="switchTab('key')" id="tab-key" class="px-4 py-1.5 rounded-md text-sm font-medium transition text-botany-200 hover:text-white">Chaves ID</button>
-            </div>
+            
+            <nav class="flex bg-botany-800/50 p-1 rounded-lg">
+                <button onclick="switchTab('collection')" id="tab-collection" class="px-5 py-2 rounded-md text-sm font-semibold transition bg-botany-600 shadow-lg text-white">Acervo</button>
+                <button onclick="switchTab('key')" id="tab-key" class="px-5 py-2 rounded-md text-sm font-semibold transition text-botany-200 hover:text-white hover:bg-botany-700">Chave Interativa</button>
+            </nav>
         </div>
     </header>
 
-    <main id="view-collection" class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <main id="view-collection" class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full animate-fade-in">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h2 class="text-2xl font-serif text-gray-800 font-bold">Acervo Digital</h2>
-                <p class="text-sm text-gray-500">Espécimes catalogados da região de Guarapuava</p>
+                <h2 class="text-2xl font-serif font-bold text-botany-900">Catálogo de Espécies</h2>
+                <p class="text-sm text-gray-500">Abrangendo Guarapuava e municípios vizinhos (Microregião Centro-Sul)</p>
             </div>
-            
-            <div class="flex gap-2 bg-white p-2 rounded-xl shadow-sm border border-gray-100">
-                <button onclick="downloadData()" class="p-2 text-gray-500 hover:text-botany-600 rounded-lg hover:bg-gray-50" title="Baixar Backup (JSON)"><i class="ph ph-download-simple text-xl"></i></button>
-                <input type="file" id="importFile" accept=".json" class="hidden" onchange="uploadData(this)">
-                <button onclick="document.getElementById('importFile').click()" class="p-2 text-gray-500 hover:text-botany-600 rounded-lg hover:bg-gray-50" title="Restaurar Backup"><i class="ph ph-upload-simple text-xl"></i></button>
-                <div class="w-px bg-gray-200 mx-1"></div>
-                <button onclick="toggleModal()" class="bg-botany-600 hover:bg-botany-500 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm transition">
-                    <i class="ph ph-plus text-lg"></i> <span class="hidden sm:inline">Adicionar Espécie</span>
+            <div class="flex gap-2">
+                <button onclick="downloadData()" class="px-3 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium flex items-center gap-2 transition" title="Baixar JSON">
+                    <i class="ph ph-download-simple"></i> Backup
+                </button>
+                <label class="px-3 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium flex items-center gap-2 cursor-pointer transition" title="Subir JSON">
+                    <i class="ph ph-upload-simple"></i> Restaurar
+                    <input type="file" onchange="uploadData(this)" class="hidden" accept=".json">
+                </label>
+                <button onclick="openFormModal()" class="px-4 py-2 bg-botany-700 hover:bg-botany-600 text-white rounded-lg text-sm font-bold flex items-center gap-2 shadow-md transition transform hover:scale-105">
+                    <i class="ph ph-plus-circle text-lg"></i> Adicionar Espécie
                 </button>
             </div>
         </div>
-        
-        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
     <main id="view-key" class="hidden flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
-        
-        <div class="flex flex-col lg:flex-row gap-6">
+        <div class="flex flex-col lg:flex-row gap-8">
             
-            <div class="w-full lg:w-1/4 space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 sticky top-20">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-bold text-gray-700">Caracteres</h3>
-                        <button onclick="resetKey()" class="text-xs text-botany-600 hover:underline">Limpar</button>
+            <div class="w-full lg:w-1/4 space-y-6">
+                <div class="bg-white p-5 rounded-xl shadow-md border border-gray-100 sticky top-24">
+                    <div class="flex justify-between items-center mb-6 pb-2 border-b border-gray-100">
+                        <h3 class="font-bold text-gray-800 flex items-center gap-2"><i class="ph ph-sliders-horizontal"></i> Filtros</h3>
+                        <button onclick="resetKey()" class="text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-wide">Limpar</button>
                     </div>
 
-                    <div class="mb-5">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider flex items-center gap-1"><i class="ph ph-fruit"></i> Fruto</h4>
+                    <div class="mb-6">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 tracking-wider">Hábito & Vida</h4>
                         <div class="space-y-2">
-                            <label class="checkbox-wrapper cursor-pointer block">
-                                <input type="checkbox" class="hidden" onchange="filterKey('fruto', 'baga')">
-                                <div class="border border-gray-100 rounded-lg p-2 hover:bg-botany-50 transition text-sm">Baga (Carnoso)</div>
+                            <label class="block cursor-pointer">
+                                <input type="checkbox" class="key-checkbox hidden" onchange="filterKey('habito', 'arbusto')">
+                                <div class="border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition text-sm font-medium">Arbusto / Subarbusto</div>
                             </label>
-                            <label class="checkbox-wrapper cursor-pointer block">
-                                <input type="checkbox" class="hidden" onchange="filterKey('fruto', 'capsula')">
-                                <div class="border border-gray-100 rounded-lg p-2 hover:bg-botany-50 transition text-sm">Cápsula (Seco)</div>
+                            <label class="block cursor-pointer">
+                                <input type="checkbox" class="key-checkbox hidden" onchange="filterKey('habito', 'arvore')">
+                                <div class="border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition text-sm font-medium">Árvore</div>
+                            </label>
+                             <label class="block cursor-pointer">
+                                <input type="checkbox" class="key-checkbox hidden" onchange="filterKey('habito', 'erva')">
+                                <div class="border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition text-sm font-medium">Erva</div>
                             </label>
                         </div>
                     </div>
 
-                    <div class="mb-5">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider flex items-center gap-1"><i class="ph ph-flower-lotus"></i> Anteras</h4>
+                    <div class="mb-6">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 tracking-wider">Fruto</h4>
                         <div class="space-y-2">
-                            <label class="checkbox-wrapper cursor-pointer block">
-                                <input type="checkbox" class="hidden" onchange="filterKey('estame', 'rostrado')">
-                                <div class="border border-gray-100 rounded-lg p-2 hover:bg-botany-50 transition text-sm">Rostradas (Bico)</div>
+                            <label class="block cursor-pointer">
+                                <input type="checkbox" class="key-checkbox hidden" onchange="filterKey('fruto', 'baga')">
+                                <div class="border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition text-sm font-medium flex justify-between">
+                                    Baga <span class="text-xs opacity-60 font-normal self-center">Carnoso</span>
+                                </div>
                             </label>
-                            <label class="checkbox-wrapper cursor-pointer block">
-                                <input type="checkbox" class="hidden" onchange="filterKey('estame', 'amarelo')">
-                                <div class="border border-gray-100 rounded-lg p-2 hover:bg-botany-50 transition text-sm">Amarelas</div>
-                            </label>
-                            <label class="checkbox-wrapper cursor-pointer block">
-                                <input type="checkbox" class="hidden" onchange="filterKey('estame', 'conectivo_longo')">
-                                <div class="border border-gray-100 rounded-lg p-2 hover:bg-botany-50 transition text-sm">Conectivo Curvo/Roxo</div>
+                            <label class="block cursor-pointer">
+                                <input type="checkbox" class="key-checkbox hidden" onchange="filterKey('fruto', 'capsula')">
+                                <div class="border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition text-sm font-medium flex justify-between">
+                                    Cápsula <span class="text-xs opacity-60 font-normal self-center">Seco</span>
+                                </div>
                             </label>
                         </div>
                     </div>
 
-                     <div class="mb-2">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider flex items-center gap-1"><i class="ph ph-star"></i> Pétalas</h4>
+                    <div class="mb-2">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 tracking-wider">Androceu (Estames)</h4>
                         <div class="space-y-2">
-                            <label class="checkbox-wrapper cursor-pointer block">
-                                <input type="checkbox" class="hidden" onchange="filterKey('petala', 'aguda')">
-                                <div class="border border-gray-100 rounded-lg p-2 hover:bg-botany-50 transition text-sm">Ápice Agudo</div>
+                            <label class="block cursor-pointer">
+                                <input type="checkbox" class="key-checkbox hidden" onchange="filterKey('anteras', 'rostradas')">
+                                <div class="border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition text-sm font-medium">Anteras Rostradas (Bico)</div>
                             </label>
-                            <label class="checkbox-wrapper cursor-pointer block">
-                                <input type="checkbox" class="hidden" onchange="filterKey('petala', 'arredondada')">
-                                <div class="border border-gray-100 rounded-lg p-2 hover:bg-botany-50 transition text-sm">Ápice Arredondado</div>
+                            <label class="block cursor-pointer">
+                                <input type="checkbox" class="key-checkbox hidden" onchange="filterKey('anteras', 'amarelas')">
+                                <div class="border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition text-sm font-medium">Anteras Amarelas</div>
+                            </label>
+                            <label class="block cursor-pointer">
+                                <input type="checkbox" class="key-checkbox hidden" onchange="filterKey('conectivo', 'prolongado')">
+                                <div class="border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition text-sm font-medium">Conectivo Prolongado/Curvo</div>
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class
+            <div class="w-full lg:w-3/4">
+                <div class="bg-botany-50 border border-botany-200 rounded-lg p-4 mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-bold text-botany-900">Identificação de Gêneros</h2>
+                        <p class="text-sm text-botany-700">Selecione caracteres para filtrar. A lógica é excludente.</p>
+                    </div>
+                    <span id="keyCount" class="bg-botany-600 text-white px-3 py-1 rounded-full text-sm font-bold">0</span>
+                </div>
+                
+                <div id="keyResults" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="detailsModal" class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-50 hidden overflow-y-auto">
+        <div class="min-h-screen px-4 text-center">
+            <span class="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
+            
+            <div class="inline-block w-full max-w-4xl p-0 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-xl">
+                
+                <div class="bg-botany-900 px-6 py-4 flex justify-between items-start sticky top-0 z-10">
+                    <div>
+                        <p id="modalFamily" class="text-botany-300 text-xs font-bold uppercase tracking-widest mb-1">Família</p>
+                        <h2 id="modalTitle" class="text-2xl md:text-3xl font-serif italic font-bold text-white">Species name</h2>
+                        <p id="modalAuthor" class="text-gray-300 text-sm mt-1">Autor</p>
+                    </div>
+                    <button onclick="closeDetails()" class="text-gray-400 hover:text-white transition p-2 bg-white/10 rounded-full hover:bg-white/20">
+                        <i class="ph ph-x text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="p-8 bg-white grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="bg-gray-100 rounded-lg overflow-hidden border border-gray-200 relative group">
+                            <img id="modalImage" src="" class="w-full h-64 object-cover" onerror="this.src='https://placehold.co/400x600?text=Sem+Imagem'">
+                            <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] p-2 backdrop-blur-sm">
+                                <p id="modalImgCaption">Legenda da foto</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-botany-50 border border-botany-200 rounded-lg p-5">
+                            <h3 class="text-botany-800 font-bold text-sm uppercase mb-3 flex items-center gap-2">
+                                <i class="ph ph-lightning"></i> Resumo Diagnóstico
+                            </h3>
+                            <div id="modalQuickBox" class="text-sm space-y-3 text-gray-700">
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2">
+                        
+                        <div class="reflora-section">
+                            <h4 class="reflora-title">Hierarquia Taxonômica</h4>
+                            <p id="modalTaxonomy" class="text-sm text-gray-600 font-mono bg-gray-50 p-2 rounded border border-gray-100">
+                                Flora > Angiospermas > ...
+                            </p>
+                        </div>
+
+                        <div class="reflora-section">
+                            <h4 class="reflora-title">Sinônimos Relevantes</h4>
+                            <ul id="modalSynonyms" class="text-sm text-gray-600 list-disc list-inside italic"></ul>
+                        </div>
+
+                        <div class="reflora-section">
+                            <h4 class="reflora-title">Descrição Morfológica</h4>
+                            <div id="modalDescription" class="reflora-text"></div>
+                        </div>
+
+                        <div class="reflora-section grid grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="reflora-title">Forma de Vida</h4>
+                                <p id="modalLifeForm" class="text-sm text-gray-700"></p>
+                            </div>
+                            <div>
+                                <h4 class="reflora-title">Substrato</h4>
+                                <p id="modalSubstrate" class="text-sm text-gray-700"></p>
+                            </div>
+                        </div>
+
+                        <div class="reflora-section">
+                            <h4 class="reflora-title">Material Examinado (Vouchers)</h4>
+                            <ul id="modalVouchers" class="text-xs font-mono text-gray-600 space-y-1"></ul>
+                        </div>
+                        
+                         <div class="pt-2">
+                            <h4 class="reflora-title">Referências Bibliográficas</h4>
+                            <div id="modalReferences" class="text-xs text-gray-500 space-y-2 leading-relaxed"></div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 text-right">
+                    <button onclick="closeDetails()" class="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="formModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="bg-botany-700 p-4 text-white flex justify-between items-center sticky top-0">
+                <h3 class="font-bold flex items-center gap-2"><i class="ph ph-pencil-simple"></i> Cadastro de Espécie</h3>
+                <button onclick="document.getElementById('formModal').classList.add('hidden')"><i class="ph ph-x text-xl"></i></button>
+            </div>
+            
+            <form id="plantForm" onsubmit="addPlant(event)" class="p-6 space-y-4">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-gray-500 uppercase">Nome Científico Aceito</label>
+                        <input type="text" id="inName" required class="w-full border p-2 rounded italic" placeholder="Ex: Rhynchanthera brachyrhyncha Cham.">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase">Família</label>
+                        <input type="text" id="inFamily" required class="w-full border p-2 rounded" placeholder="Ex: Melastomataceae">
+                    </div>
+                     <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase">Gênero</label>
+                        <input type="text" id="inGenus" required class="w-full border p-2 rounded italic" placeholder="Ex: Rhynchanthera">
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                    <p class="text-xs font-bold text-botany-700 uppercase mb-2">Imagem</p>
+                    <input type="url" id="inImgUrl" class="w-full border p-2 rounded mb-2 text-sm" placeholder="URL da Imagem (Link direto)">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="inImgAuthor" class="w-full border p-2 rounded text-sm" placeholder="Fotógrafo (Ex: Ana Versiane)">
+                        <input type="text" id="inImgDate" class="w-full border p-2 rounded text-sm" placeholder="Data (dd/mm/aaaa)">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Sinônimos (separados por vírgula)</label>
+                    <textarea id="inSynonyms" class="w-full border p-2 rounded text-sm italic" rows="2"></textarea>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                     <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase">Forma de Vida</label>
+                        <input type="text" id="inLifeForm" class="w-full border p-2 rounded" placeholder="Ex: Arbusto">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase">Substrato</label>
+                        <input type="text" id="inSubstrate" class="w-full border p-2 rounded" placeholder="Ex: Terrícola">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Diagnose (Resumo para o Grid)</label>
+                    <textarea id="inDiagnosis" required class="w-full border p-2 rounded text-sm" rows="2" placeholder="Características chave..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Descrição Completa (Morfologia)</label>
+                    <textarea id="inDescription" class="w-full border p-2 rounded text-sm" rows="4" placeholder="Caule..., Folha..."></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-botany-600 text-white py-3 rounded-lg font-bold hover:bg-botany-700">Salvar Ficha</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. BANCO DE DADOS DA COLEÇÃO (Completo com Rhynchanthera) ---
+        const seedData = [
+            {
+                id: 1715006,
+                family: "Melastomataceae",
+                genus: "Rhynchanthera",
+                scientificName: "Rhynchanthera brachyrhyncha Cham.",
+                author: "Cham.",
+                taxonomy: "Flora e Funga → Angiospermas → Melastomataceae A.Juss. → Rhynchanthera DC.",
+                synonyms: [
+                    "Rhynchanthera brachyrhyncha var. catharinensis Brade",
+                    "Rhynchanthera humilis Cogn.",
+                    "Rhynchanthera kleinii Brade",
+                    "Rhynchanthera reitzii Brade"
+                ],
+                image: {
+                    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Rhynchanthera_grandiflora.jpg/640px-Rhynchanthera_grandiflora.jpg", // Imagem ilustrativa placeholder
+                    author: "Ana Flávia Alves Versiane",
+                    date: "04/12/2020"
+                },
+                quickBox: {
+                    etymology: "Do grego rhynchos (bico) + anthera. Epíteto: rostro curto.",
+                    diagnosis: "Anteras rostradas (com bico). 5 estames férteis + 5 estaminódios.",
+                    origin: "Nativa (Não endêmica)",
+                    environment: "Campo Limpo, Cerrado, Banhados"
+                },
+                description: {
+                    lifeForm: "Arbusto, Subarbusto",
+                    substrate: "Terrícola",
+                    text: "Ramos com indumento glandular esparso a moderadamente distribuído. Folhas sésseis a curto-pecioladas, lâminas cordadas/ovais, margem serreado-glandular. Inflorescência em dicásios compostos. Estames com anteras amarelas, curto-rostradas (0,5-1 mm). Ovário glabro, 3-4 lóculos."
+                },
+                vouchers: [
+                    "A.R. Reitz, 4610, RB 81221 (SC)",
+                    "G. Hatschbach, 10940, MBM 44317 (PR)",
+                    "E. Pereira, 8227, K (PR)"
+                ],
+                references: [
+                    "Versiane, A.F.A., Silva-Gonçalves, K.C. 2020. Rhynchanthera in Flora do Brasil 2020.",
+                    "Goldenberg, R. et al. 2015. A tribo Microlicieae no Paraná. Rodriguésia 66(1)."
+                ]
+            }
+        ];
+
+        // --- 2. BANCO DE DADOS DA CHAVE (Gêneros) ---
+        // Lógica Rigorosa: Se o gênero não tem a característica, ele é eliminado.
+        const generaKey = [
+            { 
+                genus: "Rhynchanthera", 
+                traits: { habito: ["arbusto", "subarbusto"], fruto: "capsula", anteras: "rostradas", estaminodios: "sim" },
+                desc: "5 estames férteis + 5 estaminódios. Anteras com bico longo (rostradas)." 
+            },
+            { 
+                genus: "Miconia", 
+                traits: { habito: ["arbusto", "arvore"], fruto: "baga", anteras: "poricidas", petala: "arredondada" },
+                desc: "Fruto baga (carnoso). Inflorescência terminal. Hiper-iverso." 
+            },
+            { 
+                genus: "Leandra", 
+                traits: { habito: ["arbusto"], fruto: "baga", petala: "aguda" },
+                desc: "Semelhante a Miconia, mas pétalas agudas e indumento denso." 
+            },
+            { 
+                genus: "Pleroma", 
+                traits: { habito: ["arbusto", "arvore"], fruto: "capsula", conectivo: "prolongado", anteras: "falciformes" },
+                desc: "Flores vistosas (roxas). Conectivo prolongado e curvo. Cálice caduco." 
+            },
+             { 
+                genus: "Chaetogastra", 
+                traits: { habito: ["arbusto", "erva"], fruto: "capsula", anteras: "amarelas" },
+                desc: "Anteras amarelas. Conectivo curto. Cálice persistente." 
+            }
+        ];
+
+        // --- 3. ESTADO DA APLICAÇÃO ---
+        let plants = [];
+        let activeFilters = {};
+        const STORAGE_KEY = 'focspr_db_v4';
+
+        // --- 4. INICIALIZAÇÃO ---
+        function init() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                plants = JSON.parse(stored);
+            } else {
+                plants = seedData;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+            }
+            renderCollection();
+            renderKey();
+        }
+
+        // --- 5. NAVEGAÇÃO ---
+        function switchTab(tabName) {
+            document.getElementById('view-collection').classList.add('hidden');
+            document.getElementById('view-key').classList.add('hidden');
+            
+            // Reset styles
+            document.getElementById('tab-collection').classList.remove('bg-botany-600', 'text-white', 'shadow-lg');
+            document.getElementById('tab-collection').classList.add('text-botany-200');
+            document.getElementById('tab-key').classList.remove('bg-botany-600', 'text-white', 'shadow-lg');
+            document.getElementById('tab-key').classList.add('text-botany-200');
+
+            if(tabName === 'collection') {
+                document.getElementById('view-collection').classList.remove('hidden');
+                document.getElementById('tab-collection').classList.add('bg-botany-600', 'text-white', 'shadow-lg');
+                document.getElementById('tab-collection').classList.remove('text-botany-200');
+            } else {
+                document.getElementById('view-key').classList.remove('hidden');
+                document.getElementById('tab-key').classList.add('bg-botany-600', 'text-white', 'shadow-lg');
+                document.getElementById('tab-key').classList.remove('text-botany-200');
+            }
+        }
+
+        // --- 6. RENDERIZAÇÃO DA COLEÇÃO (Cards) ---
+        function renderCollection() {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = '';
+
+            plants.forEach(p => {
+                const hasImage = p.image && p.image.url;
+                const imgUrl = hasImage ? p.image.url : 'https://placehold.co/400x300?text=Sem+Foto';
+                
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group";
+                
+                card.innerHTML = `
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${imgUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute top-2 left-2 bg-botany-900/80 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider backdrop-blur-sm">
+                            ${p.family}
+                        </div>
+                    </div>
+                    <div class="p-5 flex-col flex flex-grow">
+                        <h3 class="scientific-name text-lg font-bold text-gray-800 leading-tight mb-1">${p.scientificName}</h3>
+                        <p class="text-xs text-gray-400 italic mb-3">ID: ${p.id}</p>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-100 mb-4 flex-grow">
+                            <p class="text-xs text-gray-600 line-clamp-3">${p.quickBox.diagnosis || "Sem diagnose rápida."}</p>
+                        </div>
+
+                        <div class="flex gap-2 mt-auto">
+                            <button onclick="openDetails(${p.id})" class="flex-1 bg-botany-600 hover:bg-botany-700 text-white py-2 rounded-lg text-sm font-bold transition shadow-sm">
+                                Ver Ficha
+                            </button>
+                            <button onclick="deletePlant(${p.id})" class="px-3 py-2 text-gray-300 hover:text-red-500 border border-gray-100 rounded-lg hover:bg-red-50 transition">
+                                <i class="ph ph-trash-simple text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 7. MODAL DE DETALHES (Reflora View) ---
+        function openDetails(id) {
+            const p = plants.find(plant => plant.id === id);
+            if(!p) return;
+
+            // Preencher dados básicos
+            document.getElementById('modalFamily').innerText = p.family;
+            document.getElementById('modalTitle').innerText = p.scientificName;
+            document.getElementById('modalAuthor').innerText = p.taxonomy || "";
+            
+            // Imagem e Legenda
+            const imgEl = document.getElementById('modalImage');
+            if(p.image && p.image.url) {
+                imgEl.src = p.image.url;
+                document.getElementById('modalImgCaption').innerText = `Foto: ${p.image.author || "Autor desconhecido"} | Data: ${p.image.date || "-"}`;
+            } else {
+                imgEl.src = 'https://placehold.co/400x600?text=Sem+Imagem';
+                document.getElementById('modalImgCaption').innerText = "Sem imagem disponível";
+            }
+
+            // Quick Box (Resumo)
+            const qb = p.quickBox || {};
+            document.getElementById('modalQuickBox').innerHTML = `
+                <p><strong>Etimologia:</strong> ${qb.etymology || "-"}</p>
+                <p><strong>Diagnose:</strong> ${qb.diagnosis || "-"}</p>
+                <p><strong>Origem:</strong> ${qb.origin || "-"}</p>
+                <p><strong>Ambiente:</strong> ${qb.environment || "-"}</p>
+            `;
+
+            // Dados Reflora
+            document.getElementById('modalTaxonomy').innerText = p.taxonomy || "-";
+            
+            const synList = document.getElementById('modalSynonyms');
+            synList.innerHTML = "";
+            if(p.synonyms && p.synonyms.length > 0) {
+                p.synonyms.forEach(s => {
+                    const li = document.createElement('li');
+                    li.innerText = s;
+                    synList.appendChild(li);
+                });
+            } else {
+                synList.innerHTML = "<li>Nenhum sinônimo registrado.</li>";
+            }
+
+            document.getElementById('modalDescription').innerText = p.description ? p.description.text : "Descrição não disponível.";
+            document.getElementById('modalLifeForm').innerText = p.description ? p.description.lifeForm : "-";
+            document.getElementById('modalSubstrate').innerText = p.description ? p.description.substrate : "-";
+
+            const vList = document.getElementById('modalVouchers');
+            vList.innerHTML = "";
+            if(p.vouchers && p.vouchers.length > 0) {
+                p.vouchers.forEach(v => {
+                    const li = document.createElement('li');
+                    li.innerText = v;
+                    vList.appendChild(li);
+                });
+            } else {
+                vList.innerHTML = "<li>Sem vouchers cadastrados.</li>";
+            }
+
+             const refList = document.getElementById('modalReferences');
+            refList.innerHTML = "";
+            if(p.references && p.references.length > 0) {
+                p.references.forEach(r => {
+                    const p = document.createElement('p');
+                    p.innerText = r;
+                    refList.appendChild(p);
+                });
+            }
+
+            // Abrir Modal
+            document.getElementById('detailsModal').classList.remove('hidden');
+        }
+
+        function closeDetails() {
+            document.getElementById('detailsModal').classList.add('hidden');
+        }
+
+        // --- 8. LÓGICA DA CHAVE INTERATIVA (RIGOROSA) ---
+        function filterKey(category, value) {
+            // Toggle do filtro
+            if (activeFilters[category] === value) {
+                delete activeFilters[category];
+                // Desmarcar checkbox visualmente
+                const inputs = document.querySelectorAll(`input[onchange="filterKey('${category}', '${value}')"]`);
+                inputs.forEach(i => i.checked = false);
+            } else {
+                activeFilters[category] = value;
+                // Desmarcar outros do mesmo grupo (lógica Radio Button para checkboxes)
+                const groupInputs = document.querySelectorAll(`input[onchange^="filterKey('${category}')"]`);
+                groupInputs.forEach(i => {
+                    if(!i.getAttribute('onchange').includes(`'${value}'`)) i.checked = false;
+                });
+            }
+            renderKey();
+        }
+
+        function resetKey() {
+            activeFilters = {};
+            document.querySelectorAll('.key-checkbox').forEach(c => c.checked = false);
+            renderKey();
+        }
+
+        function renderKey() {
+            const container = document.getElementById('keyResults');
+            container.innerHTML = '';
+
+            // Filtragem Rigorosa
+            const matches = generaKey.filter(genus => {
+                for (const [key, value] of Object.entries(activeFilters)) {
+                    // Se o gênero não tem a propriedade definida, assumimos que NÃO possui (Exclusão)
+                    // Ou verificamos se é um array (ex: habito pode ser arbusto E arvore)
+                    const trait = genus.traits[key];
+                    
+                    if (Array.isArray(trait)) {
+                        if (!trait.includes(value)) return false;
+                    } else {
+                        if (trait !== value) return false;
+                    }
+                }
+                return true;
+            });
+
+            document.getElementById('keyCount').innerText = matches.length;
+
+            if(matches.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-12 text-gray-400 border-2 border-dashed border-gray-200 rounded-lg">Nenhum gênero corresponde à combinação. Tente limpar os filtros.</div>`;
+                return;
+            }
+
+            matches.forEach(g => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-lg shadow-sm border-l-4 border-botany-500 flex flex-col justify-between hover:shadow-md transition";
+                card.innerHTML = `
+                    <div>
+                        <h3 class="scientific-name text-xl font-bold text-botany-900 mb-1">${g.genus}</h3>
+                        <p class="text-sm text-gray-600">${g.desc}</p>
+                    </div>
+                    <div class="mt-3 flex flex-wrap gap-2 text-[10px] font-bold text-gray-500 uppercase">
+                        ${g.traits.fruto ? `<span class="bg-gray-100 px-2 py-1 rounded border">Fruto: ${g.traits.fruto}</span>` : ''}
+                        ${g.traits.habito ? `<span class="bg-gray-100 px-2 py-1 rounded border">Hábito: ${Array.isArray(g.traits.habito) ? g.traits.habito.join('/') : g.traits.habito}</span>` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- 9. FORMULÁRIO E CRUD ---
+        function openFormModal() {
+            document.getElementById('formModal').classList.remove('hidden');
+        }
+
+        function addPlant(e) {
+            e.preventDefault();
+            
+            // Coleta simples (para o exemplo não ficar gigante, o admin preenche o básico e edita no JSON se precisar de mais detalhes complexos)
+            const newPlant = {
+                id: Date.now(),
+                scientificName: document.getElementById('inName').value,
+                family: document.getElementById('inFamily').value,
+                genus: document.getElementById('inGenus').value,
+                image: {
+                    url: document.getElementById('inImgUrl').value,
+                    author: document.getElementById('inImgAuthor').value,
+                    date: document.getElementById('inImgDate').value
+                },
+                synonyms: document.getElementById('inSynonyms').value.split(',').map(s => s.trim()),
+                description: {
+                    lifeForm: document.getElementById('inLifeForm').value,
+                    substrate: document.getElementById('inSubstrate').value,
+                    text: document.getElementById('inDescription').value
+                },
+                quickBox: {
+                    diagnosis: document.getElementById('inDiagnosis').value
+                },
+                vouchers: [], // Pode adicionar campo depois
+                taxonomy: `Flora > Angiospermas > ${document.getElementById('inFamily').value} > ${document.getElementById('inGenus').value}`
+            };
+
+            plants.push(newPlant);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+            renderCollection();
+            document.getElementById('formModal').classList.add('hidden');
+            document.getElementById('plantForm').reset();
+        }
+
+        function deletePlant(id) {
+            if(confirm('Tem certeza? Esta ação não pode ser desfeita.')) {
+                plants = plants.filter(p => p.id !== id);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+                renderCollection();
+            }
+        }
+
+        // Backup e Restore
+        function downloadData() {
+            const blob = new Blob([JSON.stringify(plants, null, 2)], {type : 'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `FOCSPR_Backup_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.json`;
+            a.click();
+        }
+
+        function uploadData(input) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if(confirm(`Restaurar ${data.length} espécies? Isso substituirá o acervo atual.`)) {
+                        plants = data;
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+                        renderCollection();
+                    }
+                } catch(err) {
+                    alert('Erro ao ler arquivo JSON.');
+                }
+            };
+            reader.readAsText(input.files[0]);
+        }
+
+        // Iniciar
+        init();
+
+    </script>
+</body>
+</html>
